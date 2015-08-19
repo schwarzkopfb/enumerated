@@ -83,7 +83,7 @@ Examples of comparisons:
  
 ```js
 
-var foodList = 'pizza', 'hamburger', 'macaroni', 'ketchup',
+var foodList = [ 'pizza', 'hamburger', 'macaroni', 'ketchup' ],
     food     = Enum(foodList)
 
 var dinner = food.pizza | food.ketchup
