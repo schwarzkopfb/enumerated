@@ -1,0 +1,25 @@
+{
+  "name": "enumerated",
+  "version": "0.0.1",
+  "description": "A simple, lightweight, easy-to-use and high performance implementation of enumerated type for JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "keywords": [
+    "enum",
+    "enumerated",
+    "enumeration",
+    "type"
+  ],
+  "author": "Schwarzkopf Balázs <schwarzkopfb@icloud.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schwarzkopfb/enumerated.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/schwarzkopfb/enumerated/issues"
+  },
+  "homepage": "https://github.com/schwarzkopfb/enumerated#readme"
+}
