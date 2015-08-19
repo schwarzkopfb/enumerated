@@ -41,6 +41,9 @@ function Enum(descriptor) {
             var value = descriptor[ i ],
                 key   = value + ''
 
+            if(opts.ignoreCase)
+                key = key.toLowerCase()
+
             this[ key ] = n
 
             _.numberToValue[n]     = value
@@ -64,6 +67,9 @@ function Enum(descriptor) {
             n *= 2
 
             value = descriptor[ key ]
+
+            if(opts.ignoreCase)
+                key = key.toLowerCase()
 
             this[ key ] = n
 
@@ -127,6 +133,9 @@ Object.defineProperties(Enum.prototype, {
 
     valueByKey: {
         value: function(key) {
+            if(this._.opts.ignoreCase)
+                key = key.toLowerCase()
+
             return this._.keyToValue[key]
         }
     },
@@ -135,6 +144,9 @@ Object.defineProperties(Enum.prototype, {
         value: function(keys) {
             if(!Array.isArray(keys))
                 keys = Array.prototype.slice.call(arguments)
+
+            if(this._.opts.ignoreCase)
+                keys = keys.map(function (key) { return key.toLowerCase() })
 
             return collect(this._.keyToValue, keys)
         }
@@ -155,6 +167,62 @@ Object.defineProperties(Enum.prototype, {
         }
     },
 
+    item: {
+        value: function (key) {
+            if(this._.opts.ignoreCase)
+                key = key.toLowerCase()
+
+            var item = this._.keyToNumber[key]
+
+            return {
+                key:   key,
+                value: this._.keyToValue[key],
+
+                'in': function (items) {
+                    return (item !== undefined) && !!(items & item)
+                }
+            }
+        }
+    },
+
+    'get': {
+        value: function (key) {
+            switch(typeof key) {
+                case 'number':
+                    var value = this._.values[key]
+
+                    if(value !== undefined)
+                        return {
+                            key:   this._.keys[key],
+                            value: value
+                        }
+                    else
+                        return value
+
+                    break
+
+                case 'string':
+                    if(this._.opts.ignoreCase)
+                        key = key.toLowerCase()
+
+                    value = this._.keyToValue[key]
+
+                    if(value !== undefined)
+                        return {
+                            key: key,
+                            value: value
+                        }
+                    else
+                        return value
+
+                    break
+
+                default:
+                    return null
+            }
+        }
+    },
+
     keys: {
         get: function() {
             return this._.keys
@@ -164,6 +232,19 @@ Object.defineProperties(Enum.prototype, {
     values: {
         get: function() {
             return this._.values
+        }
+    },
+
+    items: {
+        get: function() {
+            var values = this._.values
+
+            return this._.keys.map(function (key, i) {
+                return {
+                    key: key,
+                    value: values[i]
+                }
+            })
         }
     },
 
@@ -253,6 +334,26 @@ Object.defineProperties(Enum, {
                 global.Enum = Enum
             else
                 delete global['Enum']
+        }
+    },
+
+    item: {
+        enumerable: true,
+
+        value: function (item) {
+            return {
+                'in': function (items) {
+                    return (typeof item === 'number') && !!(items & item)
+                },
+
+                isSingle: function () {
+                    return isPowerOf2(item)
+                },
+
+                isMultiple: function () {
+                    return !isPowerOf2(item)
+                }
+            }
         }
     }
 })
