@@ -4,7 +4,7 @@
 
 A simple, lightweight, easy-to-use and high performance implementation of Enum type for JavaScript. 
 Enumerated uses lookup tables and bit operators internally, so blazingly fast and also provides a friendly interface to reduce the time you spend on exploring and integrating the module. 
-It's really lightweight - ~400 sloc - but contains all the usual features you need. 
+It's really lightweight - ~350 sloc - but contains all the usual features you need. 
 
 ## Note
 
@@ -31,8 +31,19 @@ var numbers = Enum({
 
 var selectedNumbers = numbers.four | numbers.two
 
-numbers.valuesOf(selectedNumbers) // [ 4, 2 ]
-numbers.keysOf(selectedNumbers) // [ 'four', 'two' ]
+numbers.valuesOf(selectedNumbers) // [ 2, 4 ]
+
+selectedNumbers |= numbers.five // extend selectedNumbers with another value
+
+numbers.keysOf(selectedNumbers) // [ 'two', 'four', 'five' ]
+
+selectedNumbers ^= numbers.two // remove one item from selectedNumbers
+
+numbers.valuesOf(selectedNumbers) // [ 4, 5 ]
+
+selectedNumbers ^= numbers.five | numbers.four // remove two items in one step
+
+numbers.valuesOf(selectedNumbers) // []
 
 var states = Enum('pending', 'processing', 'finished', 'failed', { single: true })
 
@@ -117,7 +128,9 @@ Supported constructors:
 
 var a = Enum('a', 'b', 'c'),
     b = Enum([ 'a', 'b', 'c' ]), // equivalent with the previous
-    c = new Enum({ a: 1, b: 2, c: 3 }) // new operator is optional 
+    c = new Enum({ a: 1, b: 2, c: 3 }), // new operator is optional 
+    d = Enum('a', 'b', 'c', { ignoreCase: true /* default: false */ }), // you can pass an object containing the desired options as the last argument
+    e = Enum([ 'a', 'b', 'c' ], { single: true /* default: false */ }) // usually the second argument will be the last :)
 
 ```
 
@@ -129,7 +142,7 @@ var fruitNames = { apple: 'red', orange: 'orange', grape: 'green', banana: 'yell
     fruits     = Enum(fruitNames),
     selected   = fruits.apple | fruits.banana
      
-fruits.valueOf(selected)  // 'red', because it returns the first item
+fruits.valueOf(selected)  // 'red', because it returns the first selected item
 fruits.valuesOf(selected) // [ 'red', 'yellow' ]
 fruits.keyOf(selected)    // 'apple'
 fruits.keysOf(selected)   // [ 'apple', 'banana' ]

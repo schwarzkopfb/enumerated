@@ -77,6 +77,9 @@ console.log(caseTest1.valuesByKeys('item2', 'iteM3', 'iTem4'))
 console.log(caseTest2.get('item2'))
 console.log(caseTest2.get('iTEm2'))
 
+console.log('extended opts', caseTest1._.opts)
+console.log('default opts', caseTest2._.opts)
+
 console.log("=============================")
 
 /// primitive values
@@ -131,3 +134,48 @@ catch(ex) {}
 
 Enum.MAX_LENGTH = 111
 console.log(Enum.MAX_LENGTH)
+
+/// adding and subtracting values
+
+console.log('====================')
+
+var test = Enum('a', 'b', 'c'),
+    sel  = test.a | test.b | test.c
+
+console.log(test.valuesOf(sel))
+
+sel ^= test.b | test.a
+
+console.log(test.valuesOf(sel))
+
+sel |= test.b
+
+console.log(test.valuesOf(sel))
+
+////
+
+console.log('++++++++++++++++++++')
+
+numbers = Enum({
+    one:   1,
+    two:   2,
+    three: 3,
+    four:  4,
+    five:  5
+})
+
+selectedNumbers = numbers.four | numbers.two
+
+console.log(numbers.valuesOf(selectedNumbers)) // [ 4, 2 ]
+
+selectedNumbers |= numbers.five // extend selectedNumbers with another value
+
+console.log(numbers.keysOf(selectedNumbers)) // [ 'four', 'two', 'five' ]
+
+selectedNumbers ^= numbers.two // remove one item from selectedNumbers
+
+console.log(numbers.valuesOf(selectedNumbers)) // [ 4, 5 ]
+
+selectedNumbers ^= numbers.five | numbers.four // remove two items in one step
+
+console.log(numbers.valuesOf(selectedNumbers)) // []

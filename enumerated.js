@@ -2,6 +2,12 @@
  * Created by schwarzkopfb on 15/8/19.
  */
 
+// should be const, when it'll be part of the standard
+var DEFAULT_OPTIONS = {
+    ignoreCase: false,
+    single:     false
+}
+
 function Enum(descriptor) {
     var args = Array.prototype.slice.call(arguments)
 
@@ -12,12 +18,12 @@ function Enum(descriptor) {
 
     // check if an options object passed as the last argument
     if(args.length > 1 && args[args.length - 1] instanceof Object)
-        opts = args[args.length - 1]
+        opts = extend(args[args.length - 1], DEFAULT_OPTIONS)
     else
-        opts = {}
+        opts = DEFAULT_OPTIONS
 
     if(!Array.isArray(descriptor) && !(descriptor instanceof Object))
-        descriptor = Array.prototype.slice.call(arguments)
+        descriptor = args
 
     var _ = {
         numberToValue: {},
@@ -26,7 +32,7 @@ function Enum(descriptor) {
         keyToNumber: {},
         keyToValue: {},
         valueToKey: {},
-        keys: [],
+        keys:   [],
         values: [],
         length: 0,
         opts: opts
@@ -367,6 +373,14 @@ function isPowerOf2(n) {
         return (n & (n - 1)) === 0
 }
 
+function extend(original, add) {
+    for(var key in add)
+        if(add.hasOwnProperty(key) && !(key in original))
+            original[ key ] = add[ key ]
+
+    return original
+}
+
 function collect(lookup, ids) {
     var result = []
 
@@ -377,10 +391,9 @@ function collect(lookup, ids) {
 }
 
 function item(lookup, length, value) {
-    for(var n = 1, i = 0, l = length; i <= l; n *= 2, i++) {
+    for(var n = 1, i = 0; i <= length; n *= 2, i++)
         if (value & n)
             return lookup[ n ]
-    }
 
     return null
 }
@@ -388,10 +401,9 @@ function item(lookup, length, value) {
 function items(lookup, length, value) {
     var result = []
 
-    for(var n = 1, i = 0, l = length; i <= l; n *= 2, i++) {
+    for(var n = 1, i = 0; i <= length; n *= 2, i++)
         if (value & n)
             result.push(lookup[ n ])
-    }
 
     return result
 }
