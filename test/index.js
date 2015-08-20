@@ -142,6 +142,9 @@ console.log('====================')
 var test = Enum('a', 'b', 'c'),
     sel  = test.a | test.b | test.c
 
+console.log('fromJSON eq', test.fromJSON('["a","c","b"]') === sel)
+console.log('fromJSON !eq', test.fromJSON('["a","b"]') === sel)
+
 console.log(test.valuesOf(sel))
 
 sel ^= test.b | test.a

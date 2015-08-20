@@ -45,6 +45,8 @@ selectedNumbers ^= numbers.five | numbers.four // remove two items in one step
 
 numbers.valuesOf(selectedNumbers) // []
 
+// not flaggable enum 
+
 var states = Enum('pending', 'processing', 'finished', 'failed', { single: true })
 
 var selectedState = states.processing
@@ -67,7 +69,10 @@ var days = Enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturda
 days.get('monday') // { key: 'monday', value: 'Monday' }
 days.get('fRiDaY') // { key: 'friday', value: 'Friday' }
 
-var selectedDays = days.saturday | days.sunday
+// items will be accessible lowercased with the dot or index operator if ignoreCase option is set to true
+var selectedDays = days.saturday | days['sunday']
+
+// ...
 
 ```
 
@@ -77,13 +82,13 @@ If you don't want to require Enumerated again and again in different modules, bu
 
 require('enumerated').global = true
 
-// after that point Enum constructor has been exposed to the global context, so feel free to use it anywhere
+// after that point Enum constructor has been exposed to the global context, 
+// so feel free to use it anywhere
 
 var animals = Enum({
     eagle: 'bird',
-    pigeon: 'bird',
-    cat: 'four-footed',
-    dog: 'four-footed'
+    snake: 'reptile',
+    cat:   'four-footed'
 })
 
 // ...
@@ -177,7 +182,7 @@ fruits.toJSON(selected) // [ 'red', 'yellow' ]
 
 JSON.stringify(fruits)  // '{"apple":"red","orange:"orange","grape:"green",banana:"yellow","pineapple":"brown"}'
 
-// todo: add fromJSON here
+fruits.fromJSON('["red","yellow"]') === selected // true
 
 fruits.toString() // '[object Enum]'
   
