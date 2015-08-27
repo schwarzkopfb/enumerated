@@ -1154,8 +1154,8 @@
     catch(ex) {}
 
     try {
-        if('define' in this)
-            define(Enum) // AMD (Requirejs)
+        if(typeof define !== 'undefined')
+            define(function() { return Enum }) // AMD (Requirejs)
     }
     catch(ex) {}
 

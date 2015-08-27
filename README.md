@@ -290,9 +290,25 @@ If you want to use Enumerated in a browser, just download and include [enumerate
 
 The complete documentation with examples for all the instance and static members can be found [here](https://github.com/schwarzkopfb/enumerated/blob/master/docs.md).
 
+## AMD (Requirejs) support
+
+It's supported to load Enumerated with a module loader that follows the AMD pattern, like the deservedly popular [Requirejs](http://requirejs.org/).
+
+```js
+
+requirejs([ 'enumerated' ], function(Enum) {
+
+    var mouseButtons = Enum('left', 'middle', 'right')
+    
+    // ...
+
+})
+
+```
+
 ## Unit tests
 
-The project is entirely covered with unit tests. Of course you can `npm test` to run them in Node.js environment or click [here](https://rawgit.com/schwarzkopfb/enumerated/c37a988d65d559dd2c57110adcdfa606aea4964b/test/index.html) if you're curious about the results in a web browser.
+The project is entirely covered with unit tests. Of course you can `npm test` to run them in Node.js environment or click [here](https://rawgit.com/schwarzkopfb/enumerated/f58cab5fa5858720edf23e82b1a4bfe0f404b753/test/index.html) if you're curious about the results in a web browser.
 
 ## Benchmark
 
