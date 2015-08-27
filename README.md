@@ -4,7 +4,7 @@
 
 A simple, lightweight, easy-to-use and high performance implementation of Enum type for JavaScript. 
 Enumerated uses lookup tables and bit operators internally, so is blazingly fast and also provides a friendly interface to reduce the time you spend on exploring and integrating the module. 
-It's really lightweight - ~420 sloc excluding comments - but contains all the usual features you need and it also works in modern browsers (IE8+).
+It's really lightweight - ~420 sloc excluding comments - but contains all the usual features you need and also works in modern browsers (IE8+).
 
 ## Usage
 
@@ -218,7 +218,7 @@ Enum.MAX_LENGTH // 32 or 64, the maximum count of items in an Enum instance. dep
 
 ```
 
-**Note:** A proper examples will be added soon.
+**Note:** Proper examples will be added soon to the ./examples folder.
 
 ## Installation
 
@@ -238,11 +238,11 @@ If you want to use Enumerated in a browser, just download and include [enumerate
     
 ## Documentation
 
-The complete documentation with examples for all the instance and static members can be found [here](https://github.com/schwarzkopfb/enumerated/blob/master/bench/index.js).
+The complete documentation with examples for all the instance and static members can be found [here](https://github.com/schwarzkopfb/enumerated/blob/master/docs.md).
 
 ## Unit tests
 
-The project is entirely covered with unit tests. Of course you can `npm test` to run them in Node.js environment or click [here](https://cdn.rawgit.com/schwarzkopfb/enumerated/master/test/index.html) if you're curious about the results in a web browser.
+The project is entirely covered with unit tests. Of course you can `npm test` to run them in Node.js environment or click [here](https://rawgit.com/schwarzkopfb/enumerated/c37a988d65d559dd2c57110adcdfa606aea4964b/test/index.html) if you're curious about the results in a web browser.
 
 ## Benchmark
 
