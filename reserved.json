@@ -39,6 +39,8 @@
     "case",
     "key",
     "ignoreCase",
-    "single"
+    "single",
+    "descriptor",
+    "options"
   ]
 }

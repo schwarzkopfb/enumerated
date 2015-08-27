@@ -4,7 +4,7 @@
 
 A simple, lightweight, easy-to-use and high performance implementation of Enum type for JavaScript. 
 Enumerated uses lookup tables and bit operators internally, so is blazingly fast and also provides a friendly interface to reduce the time you spend on exploring and integrating the module. 
-It's really lightweight - ~420 sloc excluding comments - but contains all the usual features you need and also works in modern browsers (IE8+).
+It's really lightweight - ~420 sloc excluding comments - but contains all the usual features you need and works in modern browsers (IE8+) too.
 
 ## Usage
 

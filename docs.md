@@ -20,29 +20,36 @@ A simple, lightweight, easy-to-use and high performance implementation of enumer
 
 * [Enum](#Enum)
   * [new Enum(descriptor, [options])](#new_Enum_new)
-  * [.keys](#Enum+keys) : <code>Array.&lt;String&gt;</code>
-  * [.values](#Enum+values) : <code>Array.&lt;String&gt;</code>
-  * [.items](#Enum+items) : <code>Array.&lt;{key:String, value: \*}&gt;</code>
-  * [.length](#Enum+length) : <code>Number</code>
-  * [.valueOf(n)](#Enum+valueOf) ⇒ <code>\*</code>
-  * [.keyOf(n)](#Enum+keyOf) ⇒ <code>String</code>
-  * [.valuesOf(n)](#Enum+valuesOf) ⇒ <code>Array</code>
-  * [.keysOf(n)](#Enum+keysOf) ⇒ <code>Array</code>
-  * [.valueByKey(key)](#Enum+valueByKey) ⇒ <code>\*</code>
-  * [.valuesByKeys(keys)](#Enum+valuesByKeys) ⇒ <code>Array</code>
-  * [.keyByValue(value)](#Enum+keyByValue) ⇒ <code>String</code>
-  * [.keysByValues(values)](#Enum+keysByValues) ⇒ <code>Array.&lt;String&gt;</code>
-  * [.fromValue(value)](#Enum+fromValue) ⇒ <code>Number</code>
-  * [.fromValues(value)](#Enum+fromValues) ⇒ <code>Number</code>
-  * [.fromKey(key)](#Enum+fromKey) ⇒ <code>Number</code>
-  * [.fromKeys(value)](#Enum+fromKeys) ⇒ <code>Number</code>
-  * [.item(key)](#Enum+item) ⇒ <code>Object</code>
-  * [.get(key)](#Enum+get) ⇒ <code>Object</code>
-  * [.fromJSON(value)](#Enum+fromJSON) ⇒ <code>Number</code>
-  * [.toJSON([value])](#Enum+toJSON) ⇒ <code>Object</code> &#124; <code>Array</code>
-  * [.switch(on)](#Enum+switch) ⇒ <code>Object</code>
-  * [.inspect()](#Enum+inspect) ⇒ <code>String</code>
-  * [.toString()](#Enum+toString) ⇒ <code>String</code>
+  * _instance_
+    * [.keys](#Enum+keys) : <code>Array.&lt;String&gt;</code>
+    * [.values](#Enum+values) : <code>Array.&lt;String&gt;</code>
+    * [.items](#Enum+items) : <code>Array.&lt;{key:String, value: \*}&gt;</code>
+    * [.length](#Enum+length) : <code>Number</code>
+    * [.valueOf(n)](#Enum+valueOf) ⇒ <code>\*</code>
+    * [.keyOf(n)](#Enum+keyOf) ⇒ <code>String</code>
+    * [.valuesOf(n)](#Enum+valuesOf) ⇒ <code>Array</code>
+    * [.keysOf(n)](#Enum+keysOf) ⇒ <code>Array</code>
+    * [.valueByKey(key)](#Enum+valueByKey) ⇒ <code>\*</code>
+    * [.valuesByKeys(keys)](#Enum+valuesByKeys) ⇒ <code>Array</code>
+    * [.keyByValue(value)](#Enum+keyByValue) ⇒ <code>String</code>
+    * [.keysByValues(values)](#Enum+keysByValues) ⇒ <code>Array.&lt;String&gt;</code>
+    * [.fromValue(value)](#Enum+fromValue) ⇒ <code>Number</code>
+    * [.fromValues(value)](#Enum+fromValues) ⇒ <code>Number</code>
+    * [.fromKey(key)](#Enum+fromKey) ⇒ <code>Number</code>
+    * [.fromKeys(value)](#Enum+fromKeys) ⇒ <code>Number</code>
+    * [.item(key)](#Enum+item) ⇒ <code>Object</code>
+    * [.get(key)](#Enum+get) ⇒ <code>Object</code>
+    * [.fromJSON(value)](#Enum+fromJSON) ⇒ <code>Number</code>
+    * [.toJSON([value])](#Enum+toJSON) ⇒ <code>Object</code> &#124; <code>Array</code>
+    * [.switch(on)](#Enum+switch) ⇒ <code>Object</code>
+    * [.inspect()](#Enum+inspect) ⇒ <code>String</code>
+    * [.toString()](#Enum+toString) ⇒ <code>String</code>
+  * _static_
+    * [.MAX_LENGTH](#Enum.MAX_LENGTH) : <code>Number</code>
+    * [.global](#Enum.global) : <code>Boolean</code>
+    * [.fromJSON(value)](#Enum.fromJSON) ⇒ <code>[Enum](#Enum)</code>
+    * [.item(item)](#Enum.item) ⇒ <code>Object</code>
+    * [.switch(on)](#Enum.switch) ⇒ <code>Object</code>
 
 <a name="new_Enum_new"></a>
 ### new Enum(descriptor, [options])
@@ -509,4 +516,104 @@ Override Object.prototype.toString() for Enum instances. Returns '[object Enum]'
 var colors = Enum({ red: 1, green: 2 })
 
 colors.toString() // '[object Enum]'
+```
+<a name="Enum.MAX_LENGTH"></a>
+### Enum.MAX_LENGTH : <code>Number</code>
+Get maximum count of elements in an Enum instance in the current environment.
+
+**Kind**: static property of <code>[Enum](#Enum)</code>  
+**Read only**: true  
+**Example**  
+```js
+Enum.MAX_LENGTH // 32 or 64 depending on the integer size of the system
+```
+<a name="Enum.global"></a>
+### Enum.global : <code>Boolean</code>
+Set it true to expose Enum constructor to the global context.
+
+**Kind**: static property of <code>[Enum](#Enum)</code>  
+**Example**  
+```js
+require('enumerated').global = true
+
+// from this point Enum constructor has been exposed to the global context,
+// so feel free to use it anywhere
+
+var colors = Enum('red', 'green')
+```
+<a name="Enum.fromJSON"></a>
+### Enum.fromJSON(value) ⇒ <code>[Enum](#Enum)</code>
+Instantiates an Enum from a JSON serialised representation of it. Designed to work with the output of Enum().toJSON().
+
+**Kind**: static method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>String</code> &#124; <code>Object</code> | JSON serialized enum. |
+
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+var json = colors.toJSON() // { descriptor: { red: 1, green: 2 }, options: { ignoreCase: false, single: false } }
+
+Enum.fromJSON(json) // Enum({ red: 1, green: 2 }, { ignoreCase: false, single: false })
+
+json = JSON.stringify(colors) // '{"descriptor":{"red":1,"green":2},"options":{"ignoreCase":false,"single":false}}
+
+Enum.fromJSON(json) // Enum({ red: 1, green: 2 }, { ignoreCase: false, single: false })
+```
+<a name="Enum.item"></a>
+### Enum.item(item) ⇒ <code>Object</code>
+Returns an object representing one element of an Enum instance by an integer value.
+The returned object has three members:
+- 'isSingle': method to check if the passed value is single
+- 'isMultiple': method to check if the passed value is flagged
+- 'in': method to test item against an integer value representing elements of the enum
+
+**Kind**: static method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Number</code> | The integer number representing one or more elements of an enum. |
+
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+Enum.item(colors.red).isSingle() // true
+Enum.item(colors.red).isMultiple() // false
+Enum.item(colors.red | colors.green).isSingle() // false
+Enum.item(colors.red | colors.green).isMultiple() // true
+Enum.item(colors.red).in(colors.red | colors.green) // true
+Enum.item(colors.red).in(colors.green) // false
+Enum.item(colors.red).in(colors.red) // true
+```
+<a name="Enum.switch"></a>
+### Enum.switch(on) ⇒ <code>Object</code>
+Returns an object that have a member called 'case'. You can emulate a switch statement for flagged enums with this helper method.
+The 'case' method supports chaining.
+
+**Kind**: static method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| on | <code>Number</code> | An integer value representing one or more elements of an enum to switch on. |
+
+**Example**  
+```js
+var fruits      = Enum('apple', 'orange', 'strawberry', 'lemon', 'banana'),
+    likedFruits = fruits.apple | fruits.strawberry | fruits.banana
+
+Enum.switch(likedFruits)
+      .case(fruits.apple, function() { console.log('user likes apple') })
+      .case(fruits.orange, function() { console.log('user likes orange') })
+      .case(fruits.strawberry, function() { console.log('user likes strawberry') })
+      .case(fruits.lemon, function() { console.log('user likes lemon') })
+      .case(fruits.banana, function() { console.log('user likes banana') })
+
+//output:
+//user likes apple
+//user likes strawberry
+//user likes banana
 ```

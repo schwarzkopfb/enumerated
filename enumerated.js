@@ -881,6 +881,26 @@
     })
 
     Object.defineProperties(Enum, {
+        /**
+         * Instantiates an Enum from a JSON serialised representation of it. Designed to work with the output of Enum().toJSON().
+         *
+         * @memberof Enum
+         * @method fromJSON
+         *
+         * @param {String|Object} value - JSON serialized enum.
+         * @returns {Enum}
+         *
+         * @example
+         * var colors = Enum({ red: 1, green: 2 })
+         *
+         * var json = colors.toJSON() // { descriptor: { red: 1, green: 2 }, options: { ignoreCase: false, single: false } }
+         *
+         * Enum.fromJSON(json) // Enum({ red: 1, green: 2 }, { ignoreCase: false, single: false })
+         *
+         * json = JSON.stringify(colors) // '{"descriptor":{"red":1,"green":2},"options":{"ignoreCase":false,"single":false}}
+         *
+         * Enum.fromJSON(json) // Enum({ red: 1, green: 2 }, { ignoreCase: false, single: false })
+         */
         fromJSON: {
             enumerable: true,
 
@@ -892,6 +912,16 @@
             }
         },
 
+        /**
+         * Get maximum count of elements in an Enum instance in the current environment.
+         *
+         * @memberof Enum
+         * @member {Number} MAX_LENGTH
+         * @readonly
+         *
+         * @example
+         * Enum.MAX_LENGTH // 32 or 64 depending on the integer size of the system
+         */
         MAX_LENGTH: {
             enumerable: true,
 
@@ -900,6 +930,20 @@
             }
         },
 
+        /**
+         * Set it true to expose Enum constructor to the global context.
+         *
+         * @memberof Enum
+         * @member {Boolean} global
+         *
+         * @example
+         * require('enumerated').global = true
+         *
+         * // from this point Enum constructor has been exposed to the global context,
+         * // so feel free to use it anywhere
+         *
+         * var colors = Enum('red', 'green')
+         */
         global: {
             enumerable: true,
 
@@ -915,6 +959,30 @@
             }
         },
 
+        /**
+         * Returns an object representing one element of an Enum instance by an integer value.
+         * The returned object has three members:
+         * - 'isSingle': method to check if the passed value is single
+         * - 'isMultiple': method to check if the passed value is flagged
+         * - 'in': method to test item against an integer value representing elements of the enum
+         *
+         * @memberof Enum
+         * @method item
+         *
+         * @param {Number} item - The integer number representing one or more elements of an enum.
+         * @returns {{in:function,isSingle:function,isMultiple:function}}
+         *
+         * @example
+         * var colors = Enum({ red: 1, green: 2 })
+         *
+         * Enum.item(colors.red).isSingle() // true
+         * Enum.item(colors.red).isMultiple() // false
+         * Enum.item(colors.red | colors.green).isSingle() // false
+         * Enum.item(colors.red | colors.green).isMultiple() // true
+         * Enum.item(colors.red).in(colors.red | colors.green) // true
+         * Enum.item(colors.red).in(colors.green) // false
+         * Enum.item(colors.red).in(colors.red) // true
+         */
         item: {
             enumerable: true,
 
@@ -935,6 +1003,32 @@
             }
         },
 
+        /**
+         * Returns an object that have a member called 'case'. You can emulate a switch statement for flagged enums with this helper method.
+         * The 'case' method supports chaining.
+         *
+         * @memberof Enum
+         * @method switch
+         *
+         * @param {Number} on - An integer value representing one or more elements of an enum to switch on.
+         * @returns {{case:function}}
+         *
+         * @example
+         * var fruits      = Enum('apple', 'orange', 'strawberry', 'lemon', 'banana'),
+         *     likedFruits = fruits.apple | fruits.strawberry | fruits.banana
+         *
+         * Enum.switch(likedFruits)
+         *       .case(fruits.apple, function() { console.log('user likes apple') })
+         *       .case(fruits.orange, function() { console.log('user likes orange') })
+         *       .case(fruits.strawberry, function() { console.log('user likes strawberry') })
+         *       .case(fruits.lemon, function() { console.log('user likes lemon') })
+         *       .case(fruits.banana, function() { console.log('user likes banana') })
+         *
+         * //output:
+         * //user likes apple
+         * //user likes strawberry
+         * //user likes banana
+         */
         'switch': {
             enumerable: true,
 

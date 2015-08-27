@@ -48,3 +48,23 @@ function objectEqual(obj1, obj2) {
 }
 
 exports.objectEqual = objectEqual
+
+function objectDeepEqual(obj1, obj2) {
+    if(!(obj1 instanceof Object) || !(obj2 instanceof Object) || Object.keys(obj1).length !== Object.keys(obj2).length)
+        return false
+
+    for(var key in obj1) {
+        if (!obj1.hasOwnProperty(key)) continue
+
+        if(obj1[ key ] instanceof Object) {
+            if(!objectDeepEqual(obj1[ key ], obj2[ key ]))
+                return false
+        }
+        else if(obj1[ key ] !== obj2[ key ])
+            return false
+    }
+
+    return true
+}
+
+exports.objectDeepEqual = objectDeepEqual

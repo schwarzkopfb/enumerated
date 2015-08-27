@@ -380,15 +380,15 @@ function doTest(names) {
 
     assert('toJSON' in test, 'Enum().toJSON() must be exposed')
     assert(test.toJSON instanceof Function, 'Enum().toJSON() must be a function')
-    assert(utils.objectEqual(test.toJSON(), { red: 1, green: 2, blue: 3 }), 'Enum().toJSON() must return a correct value')
-    assert(utils.objectEqual(test2.toJSON(), { red: 'red', green: 'green', blue: 'blue' }), 'Enum().toJSON() must return a correct value')
+    assert(utils.objectDeepEqual(test.toJSON(), { descriptor: { red: 1, green: 2, blue: 3 }, options: { ignoreCase: false, single: false } }), 'Enum().toJSON() must return a correct value')
+    assert(utils.objectDeepEqual(test2.toJSON(), { descriptor: { red: 'red', green: 'green', blue: 'blue' }, options: { ignoreCase: false, single: false } }), 'Enum().toJSON() must return a correct value')
     assert(utils.arrayEqual(test.toJSON(test.red | test.green), [ 1, 2 ]), 'Enum().toJSON() must return a correct value')
     assert(utils.arrayEqual(test2.toJSON(test.blue), [ 'blue' ]), 'Enum().toJSON() must return a correct value')
 
     // JSON.stringify
 
-    assert.equal(JSON.stringify(test.toJSON()), '{"red":1,"green":2,"blue":3}', 'JSON.stringify(Enum().toJSON()) must return a correct value')
-    assert.equal(JSON.stringify(test2.toJSON()), '{"red":"red","green":"green","blue":"blue"}', 'JSON.stringify(Enum().toJSON()) must return a correct value')
+    assert.equal(JSON.stringify(test), '{"descriptor":{"red":1,"green":2,"blue":3},"options":{"ignoreCase":false,"single":false}}', 'JSON.stringify(Enum()) must return a correct value')
+    assert.equal(JSON.stringify(test2), '{"descriptor":{"red":"red","green":"green","blue":"blue"},"options":{"ignoreCase":false,"single":false}}', 'JSON.stringify(Enum()) must return a correct value')
     assert.equal(JSON.stringify(test.toJSON(test.red | test.green)), '[1,2]', 'JSON.stringify(Enum().toJSON()) must return a correct value')
     assert.equal(JSON.stringify(test2.toJSON(test.blue)), '["blue"]', 'JSON.stringify(Enum().toJSON()) must return a correct value')
 
@@ -490,14 +490,14 @@ Enum({\n\
     var bools = new Enum(true, false)
 
     assert.equal(bools.valueOf(bools['true']), true, 'bool values are allowed to be used as items')
-    assert(utils.objectEqual(bools.toJSON(), { 'true': true, 'false': false }), 'bool values are allowed to be used as items')
+    assert(utils.objectDeepEqual(bools.toJSON(), { descriptor: { 'true': true, 'false': false }, options: { ignoreCase: false, single: false } }), 'bool values are allowed to be used as items')
 
     // numbers
 
     var nums = Enum(1, 2, 3, 4, 5, 6, 7, 8, 9)
 
     assert.equal(nums.valueOf(nums[2]), 2, 'number values are allowed to be used as items')
-    assert(utils.objectEqual(nums.toJSON(), { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9 }), 'number values are allowed to be used as items')
+    assert(utils.objectDeepEqual(nums.toJSON(), { descriptor: { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9 }, options: { ignoreCase: false, single: false } }), 'number values are allowed to be used as items')
 
     /* - not flaggable - */
 
