@@ -4,11 +4,7 @@
 
 A simple, lightweight, easy-to-use and high performance implementation of Enum type for JavaScript. 
 Enumerated uses lookup tables and bit operators internally, so is blazingly fast and also provides a friendly interface to reduce the time you spend on exploring and integrating the module. 
-It's really lightweight - ~420 sloc excluding comments - but contains all the usual features you need. 
-
-## Note
-
-A more detailed readme, proper examples and unit tests will be added soon.
+It's really lightweight - ~420 sloc excluding comments - but contains all the usual features you need and it also works in modern browsers (IE8+).
 
 ## Usage
 
@@ -222,6 +218,32 @@ Enum.MAX_LENGTH // 32 or 64, the maximum count of items in an Enum instance. dep
 
 ```
 
+**Note:** A proper examples will be added soon.
+
+## Installation
+
+With npm:
+
+    npm install --save enumerated
+    
+With git:
+    
+    git clone git://github.com/schwarzkopfb/enumerated.git
+    cd enumerated
+    npm test
+    
+## Browser usage
+
+If you want to use Enumerated in a browser, just download and include [enumerated.min.js](https://raw.githubusercontent.com/schwarzkopfb/enumerated/master/enumerated.min.js) in your front-end project.
+    
+## Documentation
+
+The complete documentation with examples for all the instance and static members can be found [here](https://github.com/schwarzkopfb/enumerated/blob/master/bench/index.js).
+
+## Unit tests
+
+The project is entirely covered with unit tests. Of course you can `npm test` to run them in Node.js environment or click [here](https://cdn.rawgit.com/schwarzkopfb/enumerated/master/test/index.html) if you're curious about the results in a web browser.
+
 ## Benchmark
 
 Performance is important, so I wrote a simple [benchmark](https://github.com/schwarzkopfb/enumerated/blob/master/bench/index.js) for the project.
@@ -235,18 +257,6 @@ The results on my MacBook Pro (Mid 2010) are the following:
 - 1000000 valuesByKeys() calls performed in 3.64 seconds (274725.27 ops/sec)
 
 In the light of the results, the overhead compared to more primitive solutions is negligible.
-
-## Installation
-
-With npm:
-
-    npm install --save enumerated
-    
-With git:
-    
-    git clone git://github.com/schwarzkopfb/enumerated.git
-    cd enumerated
-    npm test
 
 ## License
 

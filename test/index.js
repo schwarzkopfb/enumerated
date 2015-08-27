@@ -4,6 +4,7 @@
 
 var assert = require('assert'),
     utils  = require('./utils'),
+    _      = require('../enumerated'),
     ctx    = this
 
 var passed  = 0,
@@ -30,32 +31,34 @@ assert.throws = function throws() {
     all++
 }
 
-/* - module exposition - */
+function doGlobalTest(names) {
+    /* - module exposition - */
 
-var _ = require('../enumerated')
+    assert(_ instanceof Function && _.name === 'Enum', 'module must expose Enum constructor')
 
-assert(_ instanceof Function && _.name === 'Enum', 'module must expose Enum constructor')
+    /* - Enum members - */
 
-/* - Enum members - */
+    // Enum.global
 
-// Enum.global
+    _.global = true
 
-_.global = true
+    assert('Enum' in global, 'Enum constructor must be exposed to the global context')
+    assert(Enum.global, 'Enum.global must be true')
 
-assert('Enum' in global, 'Enum constructor must be exposed to the global context')
-assert(Enum.global, 'Enum.global must be true')
+    Enum.global = false
 
-Enum.global = false
+    assert(!('Enum' in global), 'Enum constructor must be removed from the global context')
 
-assert(!('Enum' in global), 'Enum constructor must be removed from the global context')
+    assert.throws(function () {
+        Enum()
+    }, 'Enum module cannot be accessible')
 
-assert.throws(function () {
-    Enum()
-}, 'Enum module cannot be accessible')
+    doTest(names)
+}
 
 // new scope is required to be able to perform previous tests on Enum.global
 function doTest(names) {
-    if(arguments.length) {
+    if(names) {
         names = names.props.props
 
         Object.keys(names).forEach(function (key) {
@@ -638,7 +641,7 @@ Enum({\n\
 
 if('window' in ctx)
     // load mapping table of mangled names and then run tests if we're in a browser
-    $.get('mangled.json').then(doTest)
+    $.get('mangled.json').then(doGlobalTest)
 else
     // just run the tests otherwise
-    doTest()
+    doGlobalTest()

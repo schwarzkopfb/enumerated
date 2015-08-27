@@ -27,7 +27,7 @@
      * Class representing a custom enumerated type containing the specified items given to the constructor.
      *
      * @constructor
-     * @class Enum
+     * @class
      * @global
      *
      * @param {...String|String[]|Object} descriptor - An array, object or set of string arguments specifying the elements of this instance.
@@ -508,6 +508,29 @@
         },
 
         item: {
+            /**
+             * Returns an object representing one element of this Enum instance by related key or index.
+             * The returned object has three members:
+             * - 'key': the key of the element
+             * - 'value': the value of the element
+             * - 'in': method to test item against an integer value representing elements of this enum
+             *
+             * @memberof Enum
+             * @instance
+             * @method item
+             *
+             * @param {String|Number} key - The key or index of the chosen element.
+             * @returns {{in:function,key:string,value:*}}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.item('red').value // 1
+             * colors.item(1).key // 'green', because elements are indexed from zero
+             *
+             * colors.item('red').in(colors.green | colors.red) // true
+             * colors.item('green').in(colors.red) // false
+             */
             value: function (key) {
                 var item
 
@@ -539,6 +562,25 @@
         },
 
         'get': {
+            /**
+             * Returns an object representing one element of this Enum instance by related key or index.
+             * The returned object has three members:
+             * - 'key': the key of the element
+             * - 'value': the value of the element
+             *
+             * @memberof Enum
+             * @instance
+             * @method get
+             *
+             * @param {String|Number} key - The key or index of the chosen element.
+             * @returns {{key:string,value:*}}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.get('red').value // 1
+             * colors.get(1).key // 'green', because elements are indexed from zero
+             */
             value: function (key) {
                 switch(typeof key) {
                     case 'number':
@@ -577,6 +619,22 @@
         },
 
         fromJSON: {
+            /**
+             * Returns an integer representing one or more elements of this Enum instance from a JSON serialized enum value.
+             *
+             * @memberof Enum
+             * @instance
+             * @method fromJSON
+             *
+             * @param {String|Object} value - JSON serialized enum value.
+             * @returns {Number}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.fromJSON('[1,2]') // 3, because 2^0 | 2^1 = 3, so 3 represents the first and second elements of the enum
+             * colors.fromJSON([ 2 ]) // 2, because 2^1 = 2, so 2 represents the second element of the enum
+             */
             value: function (value) {
                 if(typeof value === 'string')
                     value = JSON.parse(value)
@@ -752,13 +810,23 @@
 
     // utility functions
 
+    /**
+     * Check the given number is power of two or not.
+     *
+     * @param {Number} n - The number to check.
+     * @returns {boolean}
+     */
     function isPowerOf2(n) {
-        if(!n)
-            return false
-        else
-            return (n & (n - 1)) === 0
+        return !!n && (n & (n - 1)) === 0
     }
 
+    /**
+     * Extend an object with another one only with those keys that are missing from the original object.
+     *
+     * @param {Object} original - Object to be extended.
+     * @param {Object} add - Object to extend with.
+     * @returns {Object}
+     */
     function extend(original, add) {
         for(var key in add)
             if(add.hasOwnProperty(key) && !(key in original))
@@ -767,6 +835,13 @@
         return original
     }
 
+    /**
+     * Gather values from an object by the given array of keys.
+     *
+     * @param {Object} lookup - The object containing values to be collected.
+     * @param {String[]} ids - The array of keys we need to collect.
+     * @returns {Array}
+     */
     function collect(lookup, ids) {
         var result = []
 
@@ -776,6 +851,14 @@
         return result
     }
 
+    /**
+     * Get a value from the given object by comparing the bits of keys in the object and the given integer.
+     *
+     * @param {Object} lookup - The object containing values to search.
+     * @param {Number} length - The maximum count of iterations.
+     * @param {Number} value - A number to be compared.
+     * @returns {*}
+     */
     function item(lookup, length, value) {
         for(var n = 1, i = 0; i <= length; n *= 2, i++)
             if (value & n)
@@ -784,6 +867,14 @@
         return null
     }
 
+    /**
+     * Get an array of values from the given object by comparing the bits of keys in the object and the given integer.
+     *
+     * @param {Object} lookup - The object containing values to search.
+     * @param {Number} length - The maximum count of iterations.
+     * @param {Number} value - A number to be compared.
+     * @returns {*}
+     */
     function items(lookup, length, value) {
         var result = []
 
@@ -794,11 +885,16 @@
         return result
     }
 
-    // find the maximum length of an Enum for the current environment (typically 32 or 64, but there are special cases)
-
+    /**
+     * Maximum element count of an Enum instance in the current environment.
+     *
+     * @type {Number}
+     */
     var MAX_LENGTH = 0,
         tmp        = 1,
         n          = 1
+
+    // find the maximum length of an Enum for the current environment (typically 32 or 64, but there are special cases)
 
     while(tmp > 0) {
         tmp |= n
@@ -824,6 +920,6 @@
         if('define' in this)
             define(Enum) // AMD (Requirejs)
     }
-    catch(ex) { }
+    catch(ex) {}
 
 }()

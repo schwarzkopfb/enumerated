@@ -7,8 +7,7 @@
 ## Classes
 <dl>
 <dt><a href="#Enum">Enum</a></dt>
-<dd><p>Enum</p>
-</dd>
+<dd></dd>
 </dl>
 <a name="module_enumerated"></a>
 ## enumerated
@@ -17,8 +16,6 @@ A simple, lightweight, easy-to-use and high performance implementation of enumer
 **Author:** Schwarzkopf Balázs <schwarzkopfb@icloud.com>  
 <a name="Enum"></a>
 ## Enum
-Enum
-
 **Kind**: global class  
 
 * [Enum](#Enum)
@@ -35,6 +32,9 @@ Enum
   * [.fromValues(value)](#Enum+fromValues) ⇒ <code>Number</code>
   * [.fromKey(key)](#Enum+fromKey) ⇒ <code>Number</code>
   * [.fromKeys(value)](#Enum+fromKeys) ⇒ <code>Number</code>
+  * [.item(key)](#Enum+item) ⇒ <code>Object</code>
+  * [.get(key)](#Enum+get) ⇒ <code>Object</code>
+  * [.fromJSON(value)](#Enum+fromJSON) ⇒ <code>Number</code>
 
 <a name="new_Enum_new"></a>
 ### new Enum(descriptor, [options])
@@ -69,6 +69,27 @@ colors.keysOf(selectedColors) // [ 'green', 'blue' ]
 selectedColors ^= colors.green | colors.blue // remove colors.green and colors.blue from selectedColors in one step
 
 colors.keysOf(selectedColors) // []
+
+// not flaggable enum
+
+var state        = Enum('initial', 'pending', 'processing', 'finished', { single: true }),
+    currentState = state.processing
+
+state.valueOf(currentState) // 'processing'
+
+currentState |= state.finished // extend currentState with state.finished
+
+state.valueOf(currentState) // throws Error('This enum allows only one single choice.')
+
+// case insensitive enum
+
+var days = Enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', { ignoreCase: true })
+
+days.get('monday') // { key: 'monday', value: 'Monday' }
+days.get('fRiDaY') // { key: 'friday', value: 'Friday' }
+
+// items will be accessible lowercased with the dot or index operator if ignoreCase option is set to true
+var selectedDays = days.saturday | days['sunday']
 ```
 <a name="Enum+valueOf"></a>
 ### enum.valueOf(n) ⇒ <code>\*</code>
@@ -283,4 +304,65 @@ colors.fromKeys([ 'red', 'green' ]) // 3, because 2^0 | 2^1 = 3, so 3 represents
 colors.fromKeys('red', 'green') // 3, same as previous
 
 colors.valuesOf(colors.fromKeys('red', 'green')) // [ 1, 2 ]
+```
+<a name="Enum+item"></a>
+### enum.item(key) ⇒ <code>Object</code>
+Returns an object representing one element of this Enum instance by related key or index.
+The returned object has three members:
+- 'key': the key of the element
+- 'value': the value of the element
+- 'in': method to test item against an integer value representing elements of this enum
+
+**Kind**: instance method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>String</code> &#124; <code>Number</code> | The key or index of the chosen element. |
+
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.item('red').value // 1
+colors.item(1).key // 'green', because elements are indexed from zero
+
+colors.item('red').in(colors.green | colors.red) // true
+colors.item('green').in(colors.red) // false
+```
+<a name="Enum+get"></a>
+### enum.get(key) ⇒ <code>Object</code>
+Returns an object representing one element of this Enum instance by related key or index.
+The returned object has three members:
+- 'key': the key of the element
+- 'value': the value of the element
+
+**Kind**: instance method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>String</code> &#124; <code>Number</code> | The key or index of the chosen element. |
+
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.get('red').value // 1
+colors.get(1).key // 'green', because elements are indexed from zero
+```
+<a name="Enum+fromJSON"></a>
+### enum.fromJSON(value) ⇒ <code>Number</code>
+Returns an integer representing one or more elements of this Enum instance from a JSON serialized enum value.
+
+**Kind**: instance method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>String</code> &#124; <code>Object</code> | JSON serialized enum value. |
+
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.fromJSON('[1,2]') // 3, because 2^0 | 2^1 = 3, so 3 represents the first and second elements of the enum
+colors.fromJSON([ 2 ]) // 2, because 2^1 = 2, so 2 represents the second element of the enum
 ```
