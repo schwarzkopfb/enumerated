@@ -1,10 +1,12 @@
 {
   "name": "enumerated",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A simple, lightweight, easy-to-use and high performance implementation of enumerated type for JavaScript.",
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "node test",
+    "docs": "jsdoc2md enumerated.js > docs.md",
+    "minify": "uglifyjs enumerated.js -m --mangle-props --reserved-file reserved.json -o enumerated.min.js --name-cache test/mangled.json"
   },
   "keywords": [
     "enum",

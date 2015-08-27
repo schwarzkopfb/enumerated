@@ -3,8 +3,8 @@
 ## What's Enumerated?
 
 A simple, lightweight, easy-to-use and high performance implementation of Enum type for JavaScript. 
-Enumerated uses lookup tables and bit operators internally, so blazingly fast and also provides a friendly interface to reduce the time you spend on exploring and integrating the module. 
-It's really lightweight - ~350 sloc - but contains all the usual features you need. 
+Enumerated uses lookup tables and bit operators internally, so is blazingly fast and also provides a friendly interface to reduce the time you spend on exploring and integrating the module. 
+It's really lightweight - ~450 sloc - but contains all the usual features you need. 
 
 ## Note
 
@@ -186,8 +186,7 @@ fruits.fromJSON('["red","yellow"]') === selected // true
 
 fruits.toString() // '[object Enum]'
   
-console.log(fruits)
-/*
+console.log(fruits) /*
 
 Enum({
     "apple": "red",
@@ -223,6 +222,19 @@ Enum.MAX_LENGTH // 32 or 64, the maximum count of items in an Enum instance. dep
 
 ```
 
+## Benchmark
+
+Performance is important, so I wrote a simple [benchmark](https://github.com/schwarzkopfb/enumerated/blob/master/bench/index.js) for the project.
+The results on my MacBook Pro (Mid 2010) are the following:
+
+- 50000000 constructor calls performed in 6.87 seconds (7278020.38 ops/sec)
+- 50000000 get() calls performed in 1.37 seconds (36496350.36 ops/sec)
+- 50000000 valueOf() calls performed in 1.83 seconds (27322404.37 ops/sec)
+- 50000000 valuesOf() calls performed in 7.14 seconds (7002801.12 ops/sec)
+- 1000000 fromValues() calls performed in 3.49 seconds (286532.95 ops/sec)
+- 1000000 valuesByKeys() calls performed in 3.64 seconds (274725.27 ops/sec)
+
+In the light of the results, the overhead compared to more primitive solutions is negligible.
 
 ## Installation
 

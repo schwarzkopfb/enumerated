@@ -3,3 +3,11 @@
 .gitignore
 .npmignore
 /examples
+/bench
+/test/index.html
+/test/browser.js
+/test/mangled.json
+reserved.json
+enumerated.min.js
+docs.md
+README.md

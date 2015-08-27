@@ -1,0 +1,19 @@
+{
+  "props": {
+    "cname": 7,
+    "props": {
+      "$numberToValue": "a",
+      "$valueToNumber": "b",
+      "$numberToKey": "c",
+      "$keyToNumber": "d",
+      "$keyToValue": "e",
+      "$valueToKey": "f",
+      "$opts": "g",
+      "$_checkValue": "h"
+    }
+  },
+  "vars": {
+    "cname": -1,
+    "props": {}
+  }
+}
