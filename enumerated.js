@@ -659,15 +659,75 @@
         },
 
         toJSON: {
+            /**
+             * Returns the JSON serialised extraction of the Enum instance or value.
+             * If there is a value passed to this method then the extraction will represent that value instead of the Enum instance itself.
+             * The value should be restored later with Enum.fromJSON() or the fromJSON() method of the same Enum instance that created the serialised output.
+             *
+             * @memberof Enum
+             * @instance
+             * @method toJSON
+             *
+             * @param {Number} [value] - The value containing one or more elements of this enum.
+             * @returns {Object|Array}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.toJSON() // { descriptor: { red: 1, green: 2 }, options: { ignoreCase: false, single: false } }
+             * colors.toJSON(colors.green) // [ 2 ]
+             *
+             * colors = Enum('red', 'green', { single: true })
+             *
+             * var serialisedColors = colors.toJSON() // { descriptor: { red: 'red', green: 'green' }, options: { ignoreCase: false, single: true } }
+             * var serialisedValueOfColors = colors.toJSON(colors.green) // [ 'green' ]
+             *
+             * Enum.fromJSON(serialisedColors) // Enum('red', 'green', { single: true })
+             * colors.fromJSON(serialisedValueOfColors) // colors.green = 2, because 2^1 = 2, so 2 represents the second element of the enum
+             */
             value: function (value) {
                 if(typeof value === 'number')
                     return this.valuesOf(value)
                 else
-                    return this._.keyToValue
+                    return {
+                        descriptor: this._.keyToValue,
+                        options:    this._.opts
+                    }
             }
         },
 
         'switch': {
+            /**
+             * Returns an object that have a member called 'case'. You can emulate a switch statement for flagged enums with this helper method.
+             * The 'case' method supports chaining.
+             *
+             * @memberof Enum
+             * @instance
+             * @method switch
+             *
+             * @param {Number} on - An integer value representing one or more elements of this Enum instance to switch on.
+             * @returns {{case:function}}
+             *
+             * @example
+             * var fruits      = Enum('apple', 'orange', 'strawberry', 'lemon', 'banana'),
+             *     likedFruits = fruits.apple | fruits.strawberry | fruits.banana
+             *
+             * function printCase(value) {
+             *     console.log('user likes', value)
+             * }
+             *
+             * fruits.switch(likedFruits)
+             *       .case('apple', printCase)
+             *       .case('orange', printCase)
+             *       .case('strawberry', printCase)
+             *       .case('lemon', printCase)
+             *       .case('banana', printCase)
+             *
+             * //output:
+             * //user likes apple
+             * //user likes strawberry
+             * //user likes banana
+             */
             value: function (on) {
                 var numberToValue = this._.numberToValue,
                     keyToNumber   = this._.keyToNumber
@@ -690,18 +750,57 @@
         },
 
         keys: {
+            /**
+             * Get an array of keys of the elements in this Enum instance.
+             *
+             * @memberof Enum
+             * @instance
+             * @member {String[]} keys
+             * @readonly
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.keys // [ 'red', 'green' ]
+             */
             get: function() {
                 return this._.keys
             }
         },
 
         values: {
+            /**
+             * Get an array of values of the elements in this Enum instance.
+             *
+             * @memberof Enum
+             * @instance
+             * @member {String[]} values
+             * @readonly
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.values // [ 1, 2 ]
+             */
             get: function() {
                 return this._.values
             }
         },
 
         items: {
+            /**
+             * Get an array of elements in this Enum instance.
+             *
+             * @memberof Enum
+             * @instance
+             * @member {Array.<{key:String,value:*}>} items
+             * @readonly
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.items // [ { key: 'red', value: 1 }, { key: 'green', value: 2 } ]
+             */
             get: function() {
                 var values = this._.values
 
@@ -715,22 +814,66 @@
         },
 
         length: {
+            /**
+             * Get the count of elements in this Enum instance.
+             *
+             * @memberof Enum
+             * @instance
+             * @member {Number} length
+             * @readonly
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.length // 2
+             */
             get: function () {
                 return this._.length
-            },
-
-            set: function (value) {
-                return value
             }
         },
 
         inspect: {
+            /**
+             * Returns a pretty printed string representation of this Enum instance.
+             * Useful when you pass this instance to console.log() which uses inspect() method to display an object if possible.
+             *
+             * @memberof Enum
+             * @instance
+             * @method inspect
+             *
+             * @returns {String}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.inspect()
+             *
+             * //output:
+             * //Enum({
+             * //    "red": 1,
+             * //    "green": 2
+             * //})
+             */
             value: function() {
                 return 'Enum(' + JSON.stringify(this._.keyToValue, null, 4) + ')'
             }
         },
 
         toString: {
+            /**
+             * Override Object.prototype.toString() for Enum instances. Returns '[object Enum]'.
+             *
+             * @memberof Enum
+             * @instance
+             * @method toString
+             *
+             * @returns {String}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.toString() // '[object Enum]'
+             */
             value: function () {
                 return '[object Enum]'
             }
@@ -745,7 +888,7 @@
                 if(typeof value === 'string')
                     value = JSON.parse(value)
 
-                return new Enum(value)
+                return new Enum(value.descriptor, value.options)
             }
         },
 

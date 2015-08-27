@@ -1,6 +1,6 @@
 {
   "props": {
-    "cname": 7,
+    "cname": 9,
     "props": {
       "$numberToValue": "a",
       "$valueToNumber": "b",
@@ -9,7 +9,9 @@
       "$keyToValue": "e",
       "$valueToKey": "f",
       "$opts": "g",
-      "$_checkValue": "h"
+      "$_checkValue": "h",
+      "$descriptor": "i",
+      "$options": "j"
     }
   },
   "vars": {

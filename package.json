@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test",
+    "benchmark": "node bench",
     "docs": "jsdoc2md enumerated.js > docs.md",
     "minify": "uglifyjs enumerated.js -m --mangle-props --reserved-file reserved.json -o enumerated.min.js --name-cache test/mangled.json"
   },

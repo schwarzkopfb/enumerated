@@ -20,6 +20,10 @@ A simple, lightweight, easy-to-use and high performance implementation of enumer
 
 * [Enum](#Enum)
   * [new Enum(descriptor, [options])](#new_Enum_new)
+  * [.keys](#Enum+keys) : <code>Array.&lt;String&gt;</code>
+  * [.values](#Enum+values) : <code>Array.&lt;String&gt;</code>
+  * [.items](#Enum+items) : <code>Array.&lt;{key:String, value: \*}&gt;</code>
+  * [.length](#Enum+length) : <code>Number</code>
   * [.valueOf(n)](#Enum+valueOf) ⇒ <code>\*</code>
   * [.keyOf(n)](#Enum+keyOf) ⇒ <code>String</code>
   * [.valuesOf(n)](#Enum+valuesOf) ⇒ <code>Array</code>
@@ -35,6 +39,10 @@ A simple, lightweight, easy-to-use and high performance implementation of enumer
   * [.item(key)](#Enum+item) ⇒ <code>Object</code>
   * [.get(key)](#Enum+get) ⇒ <code>Object</code>
   * [.fromJSON(value)](#Enum+fromJSON) ⇒ <code>Number</code>
+  * [.toJSON([value])](#Enum+toJSON) ⇒ <code>Object</code> &#124; <code>Array</code>
+  * [.switch(on)](#Enum+switch) ⇒ <code>Object</code>
+  * [.inspect()](#Enum+inspect) ⇒ <code>String</code>
+  * [.toString()](#Enum+toString) ⇒ <code>String</code>
 
 <a name="new_Enum_new"></a>
 ### new Enum(descriptor, [options])
@@ -90,6 +98,54 @@ days.get('fRiDaY') // { key: 'friday', value: 'Friday' }
 
 // items will be accessible lowercased with the dot or index operator if ignoreCase option is set to true
 var selectedDays = days.saturday | days['sunday']
+```
+<a name="Enum+keys"></a>
+### enum.keys : <code>Array.&lt;String&gt;</code>
+Get an array of keys of the elements in this Enum instance.
+
+**Kind**: instance property of <code>[Enum](#Enum)</code>  
+**Read only**: true  
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.keys // [ 'red', 'green' ]
+```
+<a name="Enum+values"></a>
+### enum.values : <code>Array.&lt;String&gt;</code>
+Get an array of values of the elements in this Enum instance.
+
+**Kind**: instance property of <code>[Enum](#Enum)</code>  
+**Read only**: true  
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.values // [ 1, 2 ]
+```
+<a name="Enum+items"></a>
+### enum.items : <code>Array.&lt;{key:String, value: \*}&gt;</code>
+Get an array of elements in this Enum instance.
+
+**Kind**: instance property of <code>[Enum](#Enum)</code>  
+**Read only**: true  
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.items // [ { key: 'red', value: 1 }, { key: 'green', value: 2 } ]
+```
+<a name="Enum+length"></a>
+### enum.length : <code>Number</code>
+Get the count of elements in this Enum instance.
+
+**Kind**: instance property of <code>[Enum](#Enum)</code>  
+**Read only**: true  
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.length // 2
 ```
 <a name="Enum+valueOf"></a>
 ### enum.valueOf(n) ⇒ <code>\*</code>
@@ -365,4 +421,92 @@ var colors = Enum({ red: 1, green: 2 })
 
 colors.fromJSON('[1,2]') // 3, because 2^0 | 2^1 = 3, so 3 represents the first and second elements of the enum
 colors.fromJSON([ 2 ]) // 2, because 2^1 = 2, so 2 represents the second element of the enum
+```
+<a name="Enum+toJSON"></a>
+### enum.toJSON([value]) ⇒ <code>Object</code> &#124; <code>Array</code>
+Returns the JSON serialised extraction of the Enum instance or value.
+If there is a value passed to this method then the extraction will represent that value instead of the Enum instance itself.
+The value should be restored later with Enum.fromJSON() or the fromJSON() method of the same Enum instance that created the serialised output.
+
+**Kind**: instance method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [value] | <code>Number</code> | The value containing one or more elements of this enum. |
+
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.toJSON() // { descriptor: { red: 1, green: 2 }, options: { ignoreCase: false, single: false } }
+colors.toJSON(colors.green) // [ 2 ]
+
+colors = Enum('red', 'green', { single: true })
+
+var serialisedColors = colors.toJSON() // { descriptor: { red: 'red', green: 'green' }, options: { ignoreCase: false, single: true } }
+var serialisedValueOfColors = colors.toJSON(colors.green) // [ 'green' ]
+
+Enum.fromJSON(serialisedColors) // Enum('red', 'green', { single: true })
+colors.fromJSON(serialisedValueOfColors) // colors.green = 2, because 2^1 = 2, so 2 represents the second element of the enum
+```
+<a name="Enum+switch"></a>
+### enum.switch(on) ⇒ <code>Object</code>
+Returns an object that have a member called 'case'. You can emulate a switch statement for flagged enums with this helper method.
+The 'case' method supports chaining.
+
+**Kind**: instance method of <code>[Enum](#Enum)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| on | <code>Number</code> | An integer value representing one or more elements of this Enum instance to switch on. |
+
+**Example**  
+```js
+var fruits      = Enum('apple', 'orange', 'strawberry', 'lemon', 'banana'),
+    likedFruits = fruits.apple | fruits.strawberry | fruits.banana
+
+function printCase(value) {
+    console.log('user likes', value)
+}
+
+fruits.switch(likedFruits)
+      .case('apple', printCase)
+      .case('orange', printCase)
+      .case('strawberry', printCase)
+      .case('lemon', printCase)
+      .case('banana', printCase)
+
+//output:
+//user likes apple
+//user likes strawberry
+//user likes banana
+```
+<a name="Enum+inspect"></a>
+### enum.inspect() ⇒ <code>String</code>
+Returns a pretty printed string representation of this Enum instance.
+Useful when you pass this instance to console.log() which uses inspect() method to display an object if possible.
+
+**Kind**: instance method of <code>[Enum](#Enum)</code>  
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.inspect()
+
+//output:
+//Enum({
+//    "red": 1,
+//    "green": 2
+//})
+```
+<a name="Enum+toString"></a>
+### enum.toString() ⇒ <code>String</code>
+Override Object.prototype.toString() for Enum instances. Returns '[object Enum]'.
+
+**Kind**: instance method of <code>[Enum](#Enum)</code>  
+**Example**  
+```js
+var colors = Enum({ red: 1, green: 2 })
+
+colors.toString() // '[object Enum]'
 ```

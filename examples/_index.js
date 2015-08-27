@@ -2,7 +2,7 @@
  * Created by schwarzkopfb on 15/8/19.
  */
 
-// todo: write unit tests based on the code above
+// todo: write examples based on the code above
 
 //var Enum = require('../enumerated')
 require('../enumerated').global = true
@@ -188,3 +188,13 @@ console.log(numbers.valuesOf(selectedNumbers)) // [ 4, 5 ]
 selectedNumbers ^= numbers.five | numbers.four // remove two items in one step
 
 console.log(numbers.valuesOf(selectedNumbers)) // []
+
+///// switch
+
+numbers.switch(selectedNumbers)
+       .case('one', function(value) {
+           console.log(value)
+       })
+       .case('two', function(value) {
+           console.log(value)
+       })

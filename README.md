@@ -173,14 +173,12 @@ fruits.items /*
 
 */
 
-fruits.toJSON()         // { apple: 'red', orange: 'orange', grape: 'green', banana: 'yellow', pineapple: 'brown' }
+fruits.toJSON()         // { descriptor: { apple: 'red', orange: 'orange', grape: 'green', banana: 'yellow', pineapple: 'brown' }, options: { single: false, ignoreCase: false } }
 fruits.toJSON(selected) // [ 'red', 'yellow' ]
 
-JSON.stringify(fruits)  // '{"apple":"red","orange:"orange","grape:"green",banana:"yellow","pineapple":"brown"}'
+JSON.stringify(fruits)  // '{"descriptor":{"apple":"red","orange":"orange","grape":"green","banana":"yellow","pineapple":"brown"},"options":{"single":false,"ignoreCase":false}}'
 
 fruits.fromJSON('["red","yellow"]') === selected // true
-
-fruits.toString() // '[object Enum]'
   
 console.log(fruits) /*
 
@@ -200,7 +198,7 @@ Examples of useful Enum "static" members:
 
 ```js
 
-var fruits = Enum.fromJSON('{"apple":"red","orange:"orange","grape:"green",banana:"yellow","pineapple":"brown"}')
+var fruits = Enum.fromJSON('{"descriptor":{"apple":"red","orange":"orange","grape":"green","banana":"yellow","pineapple":"brown"},"options":{"single":false,"ignoreCase":false}}')
 
 Enum.global = true // set it true to expose Enum constructor into the global context
  
@@ -218,7 +216,59 @@ Enum.MAX_LENGTH // 32 or 64, the maximum count of items in an Enum instance. dep
 
 ```
 
-**Note:** Proper examples will be added soon to the ./examples folder.
+And there is some extra sugar:
+
+```js
+
+// for non-flaggable enums you can use the language's built-in switch statement
+
+var state   = Enum('pending', 'finished', { single: true }),
+    current = state.pending
+
+switch(current) {
+    case state.pending:
+        // ...
+        break
+        
+    case state.finished:
+        // ...
+        break
+        
+    default:
+        // ...
+        break
+}
+
+// unfortunately you can't do the same with flagged enums,
+// but Enumerated is shipped with a handy helper method
+
+var fruits      = Enum('apple', 'orange', 'strawberry', 'lemon', 'banana'),
+    likedFruits = fruits.apple | fruits.strawberry | fruits.banana
+
+function printCase(value) {
+    console.log('user likes', value)
+}
+
+fruits.switch(likedFruits)
+      .case('apple', printCase)
+      .case('orange', printCase)
+      .case('strawberry', printCase)
+      .case('lemon', printCase)
+      .case('banana', printCase)
+      
+/*
+
+output:
+
+user likes apple
+user likes strawberry
+user likes banana
+
+*/
+
+```
+
+**Note:** Proper examples will be added soon to the examples folder.
 
 ## Installation
 
@@ -257,6 +307,10 @@ The results on my MacBook Pro (Mid 2010) are the following:
 - 1000000 valuesByKeys() calls performed in 3.64 seconds (274725.27 ops/sec)
 
 In the light of the results, the overhead compared to more primitive solutions is negligible.
+
+You can run the benchmark on your machine with the following command:
+
+    npm run benchmark
 
 ## License
 
