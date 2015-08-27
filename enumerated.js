@@ -2,12 +2,18 @@
  * Created by schwarzkopfb on 15/8/19.
  */
 
+/**
+ * @module enumerated
+ * @description A simple, lightweight, easy-to-use and high performance implementation of enumerated type for JavaScript.
+ *
+ * @author Schwarzkopf Balázs <schwarzkopfb@icloud.com>
+ */
 !function () {
 
     var _global = 'window' in this ? window : global
 
     /**
-     * Default options for Enum.
+     * Default options for Enum instance.
      *
      * @type {{ignoreCase: boolean, single: boolean}}
      */
@@ -26,6 +32,50 @@
      *
      * @param {...String|String[]|Object} descriptor - An array, object or set of string arguments specifying the elements of this instance.
      * @param {Object} [options] - An object containing options about the desired behaviour of this instance.
+     * @param {Boolean} options.ignoreCase - If set to true, this instance will ignore case of the keys of its elements.
+     * @param {Boolean} options.single - If set to true, this instance will not be flaggable.
+     *
+     * @example
+     * var colors  = new Enum('red', 'green', 'blue'),
+     *     numbers = Enum({ one: 1, two: 2, three: 3 }) // new operator is optional
+     *
+     * var selectedColors = colors.red | colors.blue
+     *
+     * colors.keysOf(selectedColors) // [ 'red', 'blue' ]
+     * colors.valuesOf(selectedColors) // [ 'red', 'blue' ]
+     *
+     * selectedColors |= colors.green // extend selectedColors with colors.green
+     *
+     * colors.keysOf(selectedColors) // [ 'red', 'green', 'blue' ]
+     *
+     * selectedColors ^= colors.red // remove colors.red from selectedColors
+     *
+     * colors.keysOf(selectedColors) // [ 'green', 'blue' ]
+     *
+     * selectedColors ^= colors.green | colors.blue // remove colors.green and colors.blue from selectedColors in one step
+     *
+     * colors.keysOf(selectedColors) // []
+     *
+     * // not flaggable enum
+     *
+     * var state        = Enum('initial', 'pending', 'processing', 'finished', { single: true }),
+     *     currentState = state.processing
+     *
+     * state.valueOf(currentState) // 'processing'
+     *
+     * currentState |= state.finished // extend currentState with state.finished
+     *
+     * state.valueOf(currentState) // throws Error('This enum allows only one single choice.')
+     *
+     * // case insensitive enum
+     *
+     * var days = Enum('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', { ignoreCase: true })
+     *
+     * days.get('monday') // { key: 'monday', value: 'Monday' }
+     * days.get('fRiDaY') // { key: 'friday', value: 'Friday' }
+     *
+     * // items will be accessible lowercased with the dot or index operator if ignoreCase option is set to true
+     * var selectedDays = days.saturday | days['sunday']
      */
     function Enum(descriptor, options) {
         var args = Array.prototype.slice.call(arguments)
@@ -146,7 +196,7 @@
              * @returns {*}
              *
              * @example
-             * var colors   = Enum({ red: 1, green: 2 })
+             * var colors   = Enum({ red: 1, green: 2 }),
              *     selected = colors.red | colors.green
              *
              * colors.valueOf(selected) // 1
@@ -168,10 +218,10 @@
              * @method keyOf
              *
              * @param {Number} n - An integer value that specifies one or more elements of this Enum type.
-             * @returns {*}
+             * @returns {String}
              *
              * @example
-             * var colors   = Enum({ red: 1, green: 2 })
+             * var colors   = Enum({ red: 1, green: 2 }),
              *     selected = colors.red | colors.green
              *
              * colors.valueOf(selected) // 'red'
@@ -192,10 +242,10 @@
              * @method valuesOf
              *
              * @param {Number} n - An integer value that specifies one or more elements of this Enum type.
-             * @returns {*}
+             * @returns {Array}
              *
              * @example
-             * var colors   = Enum({ red: 1, green: 2 })
+             * var colors   = Enum({ red: 1, green: 2 }),
              *     selected = colors.red | colors.green
              *
              * colors.valueOf(selected) // [ 1, 2 ]
@@ -216,7 +266,7 @@
              * @method keysOf
              *
              * @param {Number} n - An integer value that specifies one or more elements of this Enum type.
-             * @returns {*}
+             * @returns {Array}
              *
              * @example
              * var colors   = Enum({ red: 1, green: 2 })
@@ -264,7 +314,7 @@
              * @method valuesByKeys
              *
              * @param {String[]|...String} keys
-             * @returns {*}
+             * @returns {Array}
              *
              * @example
              * var colors = Enum({ red: 1, green: 2 })
@@ -291,8 +341,8 @@
              * @instance
              * @method keyByValue
              *
-             * @param {String} value
-             * @returns {*}
+             * @param {*} value
+             * @returns {String}
              *
              * @example
              * var colors = Enum({ red: 1, green: 2 })
@@ -305,6 +355,22 @@
         },
 
         keysByValues: {
+            /**
+             * Returns associated keys of elements of this Enum instance by related values.
+             *
+             * @memberof Enum
+             * @instance
+             * @method keysByValues
+             *
+             * @param {...*|Array} values
+             * @returns {String[]}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.keysByValues([ 1, 2 ]) // [ 'red', 'green' ]
+             * colors.keysByValues(1, 2) // [ 'red', 'green' ]
+             */
             value: function(values) {
                 if(!Array.isArray(values))
                     values = Array.prototype.slice.call(arguments)
@@ -314,12 +380,49 @@
         },
 
         fromValue: {
+            /**
+             * Returns an integer representing one element of this Enum instance by related value.
+             *
+             * @memberof Enum
+             * @instance
+             * @method fromValue
+             *
+             * @param {*} value - The value of the chosen element.
+             * @returns {Number}
+             *
+             * @example
+             * var colors  = Enum({ red: 1, green: 2 }),
+             *     colors2 = Enum('red', 'green')
+             *
+             * colors.fromValue(1) // 1, because 2^0=1, so 1 represents the first element of the enum
+             * colors2.fromValue('green') // 2, because 2^1=2, so 2 represents the second number of the enum
+             *
+             * colors.keysOf(colors.fromValue(1) | colors.fromValue(2)) // [ 'red', 'green' ]
+             */
             value: function (value) {
                 return this._.valueToNumber[value]
             }
         },
 
         fromValues: {
+            /**
+             * Returns an integer representing one or more elements of this Enum instance by related values.
+             *
+             * @memberof Enum
+             * @instance
+             * @method fromValues
+             *
+             * @param {...*|Array} value - The values of the chosen elements.
+             * @returns {Number}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.fromValues([ 1, 2 ]) // 3, because 2^0 | 2^1 = 3, so 3 represents the first and second elements of the enum
+             * colors.fromValues(1, 2) // 3, same as previous
+             *
+             * colors.keysOf(colors.fromValues(1, 2)) // [ 'red', 'green' ]
+             */
             value: function (value) {
                 var arr    = value,
                     result = 0,
@@ -327,6 +430,73 @@
 
                 if(!Array.isArray(arr))
                     arr = Array.prototype.slice.call(arguments)
+
+                for(var i = 0, l = arr.length; i < l; i++)
+                    result |= lookup[ arr[ i ] ]
+
+                this._checkValue(result)
+
+                return result
+            }
+        },
+
+        fromKey: {
+            /**
+             * Returns an integer representing one element of this Enum instance by related key.
+             *
+             * @memberof Enum
+             * @instance
+             * @method fromKey
+             *
+             * @param {String} key - The key of the chosen element.
+             * @returns {Number}
+             *
+             * @example
+             * var colors  = Enum({ red: 1, green: 2 }),
+             *     colors2 = Enum('red', 'green')
+             *
+             * colors.fromKey('red') // 1, because 2^0=1, so 1 represents the first element of the enum
+             * colors2.fromKey('green') // 2, because 2^1=2, so 2 represents the second number of the enum
+             *
+             * colors.valuesOf(colors.fromKey('red') | colors.fromKey('green')) // [ 1, 2 ]
+             */
+            value: function (key) {
+                if(this._.opts.ignoreCase)
+                    key = key.toLowerCase()
+
+                return this._.keyToNumber[key]
+            }
+        },
+
+        fromKeys: {
+            /**
+             * Returns an integer representing one or more elements of this Enum instance by related keys.
+             *
+             * @memberof Enum
+             * @instance
+             * @method fromKeys
+             *
+             * @param {...String|String[]} value - The keys of the chosen elements.
+             * @returns {Number}
+             *
+             * @example
+             * var colors = Enum({ red: 1, green: 2 })
+             *
+             * colors.fromKeys([ 'red', 'green' ]) // 3, because 2^0 | 2^1 = 3, so 3 represents the first and second elements of the enum
+             * colors.fromKeys('red', 'green') // 3, same as previous
+             *
+             * colors.valuesOf(colors.fromKeys('red', 'green')) // [ 1, 2 ]
+             */
+            value: function (value) {
+                var arr    = value,
+                    result = 0,
+                    lookup = this._.keyToNumber
+
+                if(!Array.isArray(arr))
+                    arr = Array.prototype.slice.call(arguments)
+
+                if(this._.opts.ignoreCase)
+                    arr = arr.map(String)
 
                 for(var i = 0, l = arr.length; i < l; i++)
                     result |= lookup[ arr[ i ] ]
@@ -403,36 +573,6 @@
                     default:
                         return null
                 }
-            }
-        },
-
-        fromKey: {
-            value: function (value) {
-                if(this._.opts.ignoreCase)
-                    value = value.toLowerCase()
-
-                return this._.keyToNumber[value]
-            }
-        },
-
-        fromKeys: {
-            value: function (value) {
-                var arr    = value,
-                    result = 0,
-                    lookup = this._.keyToNumber
-
-                if(!Array.isArray(arr))
-                    arr = Array.prototype.slice.call(arguments)
-
-                if(this._.opts.ignoreCase)
-                    arr = arr.map(String)
-
-                for(var i = 0, l = arr.length; i < l; i++)
-                    result |= lookup[ arr[ i ] ]
-
-                this._checkValue(result)
-
-                return result
             }
         },
 
