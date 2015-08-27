@@ -11,3 +11,4 @@ reserved.json
 enumerated.min.js
 docs.md
 README.md
+.travis.yml

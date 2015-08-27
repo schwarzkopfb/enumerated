@@ -1,3 +1,8 @@
+[![view on npm](http://img.shields.io/npm/v/enumerated.svg)](https://www.npmjs.com/package/enumerated)
+[![npm module downloads per month](http://img.shields.io/npm/dm/enumerated.svg)](https://www.npmjs.com/package/enumerated)
+[![Build Status](https://travis-ci.org/schwarzkopfb/enumerated.svg?branch=master)](https://travis-ci.org/schwarzkopfb/enumerated)
+![Analytics](https://ga-beacon.appspot.com/UA-66872036-1/enumerated/README.md?pixel)
+
 # Enumerated
 
 ## What's Enumerated?
