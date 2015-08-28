@@ -17,7 +17,7 @@
     // find the maximum length of an Enum for the current environment (typically 32 or 64, but there are special cases)
 
     while(n > 0)
-        n |= Math.pow(2, MAX_LENGTH++)
+        n |= 1 << MAX_LENGTH++
 
     /**
      * Default options for Enum instance.
