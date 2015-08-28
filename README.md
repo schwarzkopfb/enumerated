@@ -217,7 +217,7 @@ Enum.item(fruits.apple).isMultiple()                 // false
 Enum.item(fruits.apple | fruits.orange).isSingle()   // false
 Enum.item(fruits.apple | fruits.orange).isMultiple() // true
 
-Enum.MAX_LENGTH // 32 or 64, the maximum count of items in an Enum instance. depends on the integer size of the system
+Enum.MAX_LENGTH // 31 or 63, the maximum count of items in an Enum instance. depends on the integer size of the system
 
 ```
 
@@ -320,12 +320,12 @@ The project is entirely covered with unit tests. Of course you can `npm test` to
 Performance is important, so I wrote a simple [benchmark](https://github.com/schwarzkopfb/enumerated/blob/master/bench/index.js) for the project.
 The results on my MacBook Pro (Mid 2010) are the following:
 
-- 50000000 constructor calls performed in 6.87 seconds (7278020.38 ops/sec)
-- 50000000 get() calls performed in 1.37 seconds (36496350.36 ops/sec)
-- 50000000 valueOf() calls performed in 1.83 seconds (27322404.37 ops/sec)
-- 50000000 valuesOf() calls performed in 7.14 seconds (7002801.12 ops/sec)
-- 1000000 fromValues() calls performed in 3.49 seconds (286532.95 ops/sec)
-- 1000000 valuesByKeys() calls performed in 3.64 seconds (274725.27 ops/sec)
+- 50000000 get() calls performed in 1.36 seconds (36764705.88 ops/sec)
+- 50000000 valueOf() calls performed in 2.88 seconds (17361111.11 ops/sec)
+- 50000000 valuesOf() calls performed in 9.27 seconds (5393743.26 ops/sec)
+- 1000000 fromValues() calls performed in 3.84 seconds (260416.67 ops/sec)
+- 1000000 valuesByKeys() calls performed in 3.90 seconds (256410.26 ops/sec)
+- 100000 constructor calls performed in 5.77 seconds (17331.02 ops/sec)
 
 In the light of the results, the overhead compared to more primitive solutions is negligible.
 

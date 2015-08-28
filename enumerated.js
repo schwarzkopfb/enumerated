@@ -11,13 +11,17 @@
 !function () {
 
     var _global    = 'window' in this ? window : global,
-        MAX_LENGTH = 0,
+        MAX_LENGTH = -1,
         n          = 1
 
-    // find the maximum length of an Enum for the current environment (typically 32 or 64, but there are special cases)
+    // find the maximum length of an Enum for the current environment (typically 31 or 63, but there are special cases)
 
     while(n > 0)
-        n |= 1 << MAX_LENGTH++
+        n |= 1 << ++MAX_LENGTH
+
+    // create bit mask for abs
+
+    var mask = 1 << MAX_LENGTH
 
     /**
      * Default options for Enum instance.
@@ -119,7 +123,7 @@
         if(Array.isArray(descriptor)) {
             _.length = descriptor.length
 
-            for(var n = 1, i = 0, l = descriptor.length; i < l; n *= 2, i++) {
+            for(var n = 1, i = 0, l = descriptor.length; i < l; n = ((1 << ++i) ^ mask) - mask) {
                 var value = descriptor[ i ],
                     key   = value + ''
 
@@ -162,8 +166,7 @@
                 _.keys.push(key)
                 _.values.push(value)
 
-                i++
-                n *= 2
+                n = ((1 << ++i) ^ mask) - mask
             }
 
             _.keyToValue  = descriptor
@@ -927,7 +930,7 @@
          * @readonly
          *
          * @example
-         * Enum.MAX_LENGTH // 32 or 64 depending on the integer size of the system
+         * Enum.MAX_LENGTH // 31 or 63 depending on the integer size of the system
          */
         MAX_LENGTH: {
             enumerable: true,
@@ -1104,7 +1107,7 @@
      * @returns {*}
      */
     function item(lookup, length, value) {
-        for(var n = 1, i = 0; i <= length; n *= 2, i++)
+        for(var n = 1, i = 0; i <= length; n = ((1 << ++i) ^ mask) - mask)
             if (value & n)
                 return lookup[ n ]
 
@@ -1122,7 +1125,7 @@
     function items(lookup, length, value) {
         var result = []
 
-        for(var n = 1, i = 0; i <= length; n *= 2, i++)
+        for(var n = 1, i = 0; i <= length; n = ((1 << ++i) ^ mask) - mask)
             if (value & n)
                 result.push(lookup[ n ])
 

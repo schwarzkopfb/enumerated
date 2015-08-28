@@ -27,13 +27,6 @@ function snapshot(name) {
     timestamp = +new Date
 }
 
-// constructor call
-
-while(--i)
-    test.valuesOf(rand())
-
-snapshot('constructor')
-
 // get()
 
 while(--i)
@@ -75,3 +68,14 @@ while(--i)
     test.valuesByKeys(1, 4, 5, 2)
 
 snapshot('valuesByKeys()')
+
+// ...and it's time again
+
+i = ITERATIONS = 100000
+
+// constructor call
+
+while(--i)
+    test = Enum(1, 2, 3, 4, 5, 6, 7, 8)
+
+snapshot('constructor')

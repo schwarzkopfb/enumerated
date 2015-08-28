@@ -525,7 +525,7 @@ Get maximum count of elements in an Enum instance in the current environment.
 **Read only**: true  
 **Example**  
 ```js
-Enum.MAX_LENGTH // 32 or 64 depending on the integer size of the system
+Enum.MAX_LENGTH // 31 or 63 depending on the integer size of the system
 ```
 <a name="Enum.global"></a>
 ### Enum.global : <code>Boolean</code>
