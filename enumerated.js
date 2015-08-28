@@ -10,7 +10,14 @@
  */
 !function () {
 
-    var _global = 'window' in this ? window : global
+    var _global    = 'window' in this ? window : global,
+        MAX_LENGTH = 0,
+        n          = 1
+
+    // find the maximum length of an Enum for the current environment (typically 32 or 64, but there are special cases)
+
+    while(n > 0)
+        n |= Math.pow(2, MAX_LENGTH++)
 
     /**
      * Default options for Enum instance.
@@ -1120,23 +1127,6 @@
                 result.push(lookup[ n ])
 
         return result
-    }
-
-    /**
-     * Maximum element count of an Enum instance in the current environment.
-     *
-     * @type {Number}
-     */
-    var MAX_LENGTH = 0,
-        tmp        = 1,
-        n          = 1
-
-    // find the maximum length of an Enum for the current environment (typically 32 or 64, but there are special cases)
-
-    while(tmp > 0) {
-        tmp |= n
-        n   *= 2
-        MAX_LENGTH++
     }
 
     // try to expose constructor
