@@ -289,7 +289,7 @@ With git:
     
 ## Browser usage
 
-If you want to use Enumerated in a browser, just download and include [enumerated.min.js](https://raw.githubusercontent.com/schwarzkopfb/enumerated/master/enumerated.min.js) in your front-end project.
+If you want to use Enumerated in a browser, just download and include [enumerated.min.js](https://raw.githubusercontent.com/schwarzkopfb/enumerated/master/enumerated.min.js) in your front-end project. Don't worry, it weights only about 5 kB.
     
 ## Documentation
 

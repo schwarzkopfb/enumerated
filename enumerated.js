@@ -81,11 +81,11 @@
         var args = Array.prototype.slice.call(arguments)
 
         if(!(this instanceof Enum))
-            return new (Enum.bind.apply(Enum, [ descriptor ].concat(args)))()
+            return new (Function.prototype.bind.apply(Enum, [ null ].concat(args)))
 
         var opts
 
-        // check if an options object passed as the last argument
+        // is last argument an options object?
         if(args.length > 1 && args[args.length - 1] instanceof Object)
             opts = extend(args.pop(), DEFAULT_OPTIONS)
         else
